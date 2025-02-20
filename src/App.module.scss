@@ -1,5 +1,49 @@
 $primary-color: #2196F3;
 
+header {
+  margin-bottom: 50px;
+}
+
 .main {
-  border: 5px solid red
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo img {
+  width: 60px;
+  height: 60px;
+}
+
+.ticketsContainer {
+  width: 500px;
+  height: 500px;
+}
+
+.priceFilter {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 500px;
+  height: 50px;
+  margin-bottom: 20px;
+  outline: 1px solid #DFE5EC;
+  border-radius: 5px;
+}
+
+.priceFilter button{
+  height: inherit;
+  text-transform: uppercase;
+  background-color: #FFFFFF;
+  font-weight: 600;
+  letter-spacing: .5px;
+  transition: .25s ease-in all;
+}
+
+.priceFilter button:hover,
+.priceFilter button:focus {
+  background-color: #F1FCFF;
+}
+
+.priceFilter button:last-of-type,
+.priceFilter button:nth-of-type(2){
+  box-shadow: -1px 0px 0px 0px #DFE5EC;
 }

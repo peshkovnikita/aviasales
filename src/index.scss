@@ -6,6 +6,9 @@
 
 body {
   background-color: #F3F7FA;
+  font-family: 'Open Sans', Arial, sans-serif;
+  color: #4A4A4A;
+  font-size: 12px;
 }
 
 #root {
@@ -14,4 +17,21 @@ body {
   padding: 50px 100px;
   text-align: center;
   border: 1px solid black
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  width: auto;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+button, a {
+  cursor: pointer;
 }
