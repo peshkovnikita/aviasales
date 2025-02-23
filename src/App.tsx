@@ -4,9 +4,7 @@ function App() {
   return (
     <>
         <header>
-            <a href='#' className={cl.logo}>
-                <img src='../public/logo.svg' alt='logo'/>
-            </a>
+            <a href='#' className={cl.logo}></a>
         </header>
         <main className={cl.main}>
             <aside>Side Filters</aside>
