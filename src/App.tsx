@@ -1,4 +1,6 @@
 import cl from './App.module.scss'
+import Ticket from "./components/Ticket/Ticket.tsx";
+import SideFilters from './components/SideFilters/SideFilters.tsx'
 
 function App() {
   return (
@@ -7,7 +9,7 @@ function App() {
             <a href='#' className={cl.logo}></a>
         </header>
         <main className={cl.main}>
-            <aside>Side Filters</aside>
+            <SideFilters />
             <section>
                 <nav className={cl.priceFilter}>
                     <button>Самый дешевый</button>
@@ -15,23 +17,16 @@ function App() {
                     <button>Оптимальный</button>
                 </nav>
                 <div className={cl.ticketsContainer}>
-                    <ul style={{width: '300px', height: '100px'}}>
-                        <li>
-                            ticket 1
-                        </li>
-                        <li>
-                            ticket 1
-                        </li>
-                        <li>
-                            ticket 1
-                        </li>
+                    <ul style={{width: 'inherit', height: 'fit-content'}}>
+                        <Ticket />
+                        <Ticket />
                     </ul>
+                    <button type='button' className={cl.btnLoadMore}>
+                        Показать еще 5 билетов!
+                    </button>
                 </div>
             </section>
         </main>
-        <footer>
-            Footer
-        </footer>
     </>
   )
 }

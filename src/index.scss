@@ -9,6 +9,8 @@ body {
   font-family: 'Open Sans', Arial, sans-serif;
   color: #4A4A4A;
   font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 #root {
@@ -16,7 +18,6 @@ body {
   margin: 0 auto;
   padding: 50px 100px;
   text-align: center;
-  border: 1px solid black
 }
 
 ul {

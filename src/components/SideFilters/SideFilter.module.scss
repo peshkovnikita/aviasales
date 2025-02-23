@@ -1,0 +1,45 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 232px;
+  height: 252px;
+  padding: 20px 0 10px 0;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+  text-align: left;
+
+  .title {
+    margin-left: 20px;
+    text-transform: uppercase;
+  }
+
+  .sideFilters {
+    font-size: 13px;
+    font-weight: 400;
+
+    li {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding-left: 20px;
+      vertical-align: middle;
+      transition: .25s ease-in all;
+
+      label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        height: 100%;
+        width: 100%;
+        padding-left: 10px;
+      }
+    }
+
+    li:hover {
+      background-color: #F1FCFF;
+    }
+  }
+}
+
