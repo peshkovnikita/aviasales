@@ -9,12 +9,13 @@
 }
 
 .infoWrapper {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: 36px 78px;
+  row-gap: 30px;
 }
 
 .ticketHeader {
-  width: 500px;
+  width: 100%;
   height: 36px;
   display: flex;
   justify-content: space-between;
@@ -23,5 +24,38 @@
     font-size: 24px;
     color: #2196F3;
     font-weight: 600;
+  }
+}
+
+.ticketInfo {
+  display: grid;
+  grid-template-rows: 32px;
+  row-gap: 14px;
+  width: 100%;
+  height: 78px;
+}
+
+.ticketDataContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+
+  .ticketData {
+    width: 152px;
+
+    span {
+      text-transform: uppercase;
+      display: block;
+      letter-spacing: 0;
+    }
+
+    span:first-of-type {
+      color: #A0B0B9;
+    }
+
+    span:last-of-type {
+      font-size: 14px;
+    }
   }
 }

@@ -20,6 +20,9 @@ function App() {
                     <ul style={{width: 'inherit', height: 'fit-content'}}>
                         <Ticket />
                         <Ticket />
+                        <Ticket />
+                        <Ticket />
+                        <Ticket />
                     </ul>
                     <button type='button' className={cl.btnLoadMore}>
                         Показать еще 5 билетов!

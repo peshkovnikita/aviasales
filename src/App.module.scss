@@ -26,7 +26,6 @@ header {
 
 .ticketsContainer {
   width: 500px;
-  height: 500px;
 }
 
 .priceFilter {
@@ -50,8 +49,13 @@ header {
     box-shadow: -1px 0px 0px 0px $border-color;
   }
 
-  :hover, :focus {
+  :hover {
     background-color: $secondary-color;
+  }
+
+  :focus {
+    background-color: $primary-color;
+    color: white;
   }
 }
 

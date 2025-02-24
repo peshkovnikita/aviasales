@@ -6,9 +6,38 @@ function Ticket() {
             <div className={cl.infoWrapper}>
                 <div className={cl.ticketHeader}>
                     <span className={cl.price}>13 400 Р</span>
-                    <img src="./src/media/S7_logo.png" alt="s7" />
+                    <img src="./src/media/S7_logo.png" alt='airline logo' />
                 </div>
-                <div></div>
+                <div className={cl.ticketInfo}>
+                    <div className={cl.ticketDataContainer}>
+                        <div className={cl.ticketData}>
+                            <span>MOW - HKT</span>
+                            <span>10:45 - 08:00</span>
+                        </div>
+                        <div className={cl.ticketData}>
+                            <span>В пути</span>
+                            <span>21ч 15м</span>
+                        </div>
+                        <div className={cl.ticketData}>
+                            <span>2 пересадки</span>
+                            <span>HKG, JNB</span>
+                        </div>
+                    </div>
+                    <div className={cl.ticketDataContainer}>
+                        <div className={cl.ticketData}>
+                            <span>MOW - HKT</span>
+                            <span>11:20 - 00:50</span>
+                        </div>
+                        <div className={cl.ticketData}>
+                            <span>В пути</span>
+                            <span>13ч 30м</span>
+                        </div>
+                        <div className={cl.ticketData}>
+                            <span>1 пересадка</span>
+                            <span>HKG</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </li>
     )
