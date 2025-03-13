@@ -1,10 +1,31 @@
 import cl from './App.module.scss'
-import Ticket from "./components/Ticket/Ticket.tsx";
+import Ticket from './components/Ticket/Ticket.tsx';
 import SideFilters from './components/SideFilters/SideFilters.tsx'
 
+import { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+
+import { getId } from './services/TicketsAPI.ts'
+
+// const getTicketsThunk = (dispatch) => {
+//     dispatch(getTickets())
+// }
+
+const getIden = async () => {
+    const id = await getId()
+    console.log(id)
+}
+
 function App() {
-  return (
-    <>
+    //const dispatch = useDispatch();
+// СОЗДАТЬ КОМПОНЕНТ TicketList И ДЕЛАТЬ ЗАПРОС К СЕРВЕРУ НА ПОИСК ID ИЗ НЕГО ПРИ МАУНТИНГЕ.
+// ЧТОБЫ ОСТАЛЬНЫЕ ЧАСТИ ПРИЛОЖЕНИЯ НЕ ЗАВИСЕЛИ ОТ ЗАПРОСА НА СЕРВЕР
+    useEffect(() => {
+        getIden();
+    }, []);
+
+    return (
+      <>
         <header>
             <a href='#' className={cl.logo}></a>
         </header>
@@ -17,7 +38,7 @@ function App() {
                     <button>Оптимальный</button>
                 </nav>
                 <div className={cl.ticketsContainer}>
-                    <ul style={{width: 'inherit', height: 'fit-content'}}>
+                    <ul>
                         <Ticket />
                         <Ticket />
                         <Ticket />
@@ -30,7 +51,7 @@ function App() {
                 </div>
             </section>
         </main>
-    </>
+      </>
   )
 }
 

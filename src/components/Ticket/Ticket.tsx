@@ -6,7 +6,7 @@ function Ticket() {
             <div className={cl.infoWrapper}>
                 <div className={cl.ticketHeader}>
                     <span className={cl.price}>13 400 Р</span>
-                    <img src="./src/media/S7_logo.png" alt='airline logo' />
+                    <img src="https://pics.avs.io/99/36/TK.png" alt='airline logo' />
                 </div>
                 <div className={cl.ticketInfo}>
                     <div className={cl.ticketDataContainer}>

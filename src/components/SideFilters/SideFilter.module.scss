@@ -27,6 +27,7 @@
       vertical-align: middle;
       transition: .25s ease-in all;
       cursor: pointer;
+      user-select: none;
 
       label {
         display: flex;

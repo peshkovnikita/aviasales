@@ -26,6 +26,11 @@ header {
 
 .ticketsContainer {
   width: 500px;
+
+  ul {
+    width: inherit;
+    height: fit-content;
+  }
 }
 
 .priceFilter {

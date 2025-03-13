@@ -7,9 +7,7 @@ export interface IState {
     filters: IFiltersState;
 }
 
-interface IAction {
-    type: string;
-}
+export type Action = { type: string };
 
 const initialState:IState = {
     filters: {
@@ -27,8 +25,7 @@ const willToggleAll = (filterState):boolean =>
     filterState.TOGGLE_TWO_CHANGES &&
     filterState.TOGGLE_THREE_CHANGES;
 
-
-const reducer = (state: IState = initialState, action:IAction ): IState => {
+const reducer = (state: IState = initialState, action:Action ): IState => {
     if (action.type === 'TOGGLE_ALL') {
         const newValue = !state.filters.TOGGLE_ALL;
         return {
