@@ -6,3 +6,4 @@ export const toggleOneChange = ():Action => ({ type: 'TOGGLE_ONE_CHANGE' });
 export const toggleTwoChanges = ():Action => ({ type: 'TOGGLE_TWO_CHANGES' });
 export const toggleThreeChanges = ():Action => ({ type: 'TOGGLE_THREE_CHANGES' });
 
+

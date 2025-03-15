@@ -3,28 +3,18 @@ import './index.scss'
 import App from './App.tsx'
 
 import { Provider } from 'react-redux';
-import { configureStore, Tuple } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducer.ts'
+import logger from 'redux-logger'
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
-const loggerMiddleware = store => next => action => {
-    const result = next(action);
-    console.log('Middleware', store.getState())
-    return result
-}
-
-export const getTicketsThunk = store => next => action => {
-    const result = next(action);
-    console.log('Middleware', store.getState())
-    return result
-}
-
 const store = configureStore({
     reducer: rootReducer,
-    middleware: () => new Tuple(loggerMiddleware),
-    devTools: true,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(logger), // Добавляем middleware
+    devTools: true
 });
 
 root.render(

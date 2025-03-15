@@ -1,40 +1,80 @@
 import cl from './Ticket.module.scss'
+import { addMinutes } from 'date-fns';
 
-function Ticket() {
+const minToHours = (min) => {
+    const hours = Math.floor(min / 60);
+    const minutes = min % 60;
+
+    return `${hours}Ч ${minutes}М`
+}
+
+const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+}
+
+function Ticket({ price, carrier, segments }) {
+    const [ thereFlight, backFlight ] = segments
+
     return(
         <li className={cl.ticketItem}>
             <div className={cl.infoWrapper}>
                 <div className={cl.ticketHeader}>
-                    <span className={cl.price}>13 400 Р</span>
-                    <img src="https://pics.avs.io/99/36/TK.png" alt='airline logo' />
+                    <span className={cl.price}>
+                        { `${String(price).slice(0, 2)} ${String(price).slice(2, 5)} Р` }
+                    </span>
+                    <img src={`https://pics.avs.io/99/36/${carrier}.png`} alt='airline logo' />
                 </div>
                 <div className={cl.ticketInfo}>
                     <div className={cl.ticketDataContainer}>
                         <div className={cl.ticketData}>
-                            <span>MOW - HKT</span>
-                            <span>10:45 - 08:00</span>
+                            <span>
+                                { `${thereFlight.origin} − ${thereFlight.destination}` }
+                            </span>
+                            <span>
+                                { `${formatDate(thereFlight.date)} − ${formatDate(addMinutes(thereFlight.date, thereFlight.duration))}` }
+                            </span>
                         </div>
                         <div className={cl.ticketData}>
                             <span>В пути</span>
-                            <span>21ч 15м</span>
+                            <span>{ minToHours(thereFlight.duration) }</span>
                         </div>
                         <div className={cl.ticketData}>
-                            <span>2 пересадки</span>
-                            <span>HKG, JNB</span>
+                            <span>
+                                { thereFlight.stops.length > 1 ?
+                                    `${thereFlight.stops.length} пересадки` :
+                                    thereFlight.stops.length === 1 ? '1 пересадка' : 'Без пересадок' }
+                            </span>
+                            <span>
+                                { thereFlight.stops.length ? thereFlight.stops.join(', ') : '—' }
+                            </span>
                         </div>
                     </div>
                     <div className={cl.ticketDataContainer}>
                         <div className={cl.ticketData}>
-                            <span>MOW - HKT</span>
-                            <span>11:20 - 00:50</span>
+                            <span>
+                                { `${backFlight.origin} − ${backFlight.destination}` }
+                            </span>
+                            <span>
+                                { `${formatDate(backFlight.date)} − ${formatDate(addMinutes(backFlight.date, backFlight.duration))}` }
+                            </span>
                         </div>
                         <div className={cl.ticketData}>
                             <span>В пути</span>
-                            <span>13ч 30м</span>
+                            <span>{ minToHours(backFlight.duration) }</span>
                         </div>
                         <div className={cl.ticketData}>
-                            <span>1 пересадка</span>
-                            <span>HKG</span>
+                            <span>
+                                { backFlight.stops.length > 1 ?
+                                    `${backFlight.stops.length} пересадки` :
+                                    backFlight.stops.length === 1 ? '1 пересадка' : 'Без пересадок' }
+                            </span>
+                            <span>
+                                { backFlight.stops.length ? backFlight.stops.join(', ') : '—' }
+                            </span>
                         </div>
                     </div>
                 </div>

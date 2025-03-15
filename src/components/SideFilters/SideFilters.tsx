@@ -1,6 +1,6 @@
 import cl from './SideFilter.module.scss'
 import type { IState } from '../../reducer'
-//import type { Dispatch } from 'redux'
+
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleAll, toggleNoChanges, toggleOneChange, toggleTwoChanges, toggleThreeChanges } from '../../actions.ts';
 

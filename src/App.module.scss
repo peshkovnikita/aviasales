@@ -24,15 +24,6 @@ header {
   border-radius: 2px;
 }
 
-.ticketsContainer {
-  width: 500px;
-
-  ul {
-    width: inherit;
-    height: fit-content;
-  }
-}
-
 .priceFilter {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -64,12 +55,4 @@ header {
   }
 }
 
-.btnLoadMore {
-  width: inherit;
-  height: 50px;
-  background-color: $primary-color;
-  color: white;
-  text-transform: uppercase;
-  border-radius: 5px;
-}
 

@@ -1,0 +1,21 @@
+$primary-color: #2196F3;
+$secondary-color: #F1FCFF;
+$border-color: #DFE5EC;
+
+.ticketsContainer {
+  width: 500px;
+
+  ul {
+    width: inherit;
+    height: fit-content;
+  }
+}
+
+.btnLoadMore {
+  width: inherit;
+  height: 50px;
+  background-color: $primary-color;
+  color: white;
+  text-transform: uppercase;
+  border-radius: 5px;
+}
