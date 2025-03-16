@@ -1,11 +1,18 @@
+$primary-color: #2196F3;
+
+
 .ticketItem {
   width: inherit;
   height: 184px;
   padding: 20px;
-  margin-bottom: 20px;
+  margin-top: 20px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.ticketItem:last-of-type {
+  margin-bottom: 20px;
 }
 
 .infoWrapper {
@@ -22,7 +29,7 @@
 
   .price {
     font-size: 24px;
-    color: #2196F3;
+    color: $primary-color;
     font-weight: 600;
   }
 }

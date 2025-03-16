@@ -13,7 +13,7 @@ const root = createRoot(rootElement);
 const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(logger), // Добавляем middleware
+        getDefaultMiddleware().concat(logger),
     devTools: true
 });
 

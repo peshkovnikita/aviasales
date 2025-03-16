@@ -39,7 +39,7 @@ interface Ticket {
 }
 
 interface TicketData {
-    tickets: [Ticket] | null;
+    tickets: Ticket[] | [];
     isLoading: boolean;
     error: boolean;
 }
@@ -51,12 +51,12 @@ export interface IState {
 
 export type Action = {
     type: string,
-    tickets?: [Ticket]
+    tickets?: Ticket[]
 };
 
 const initialState:IState = {
     data: {
-        tickets: null,
+        tickets: [],
         isLoading: false,
         error: false,
     },
@@ -81,18 +81,28 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
             ...state,
             data: {
                 ...state.data,
-                isLoading: !state.data.isLoading,
+                isLoading: true,
             }
         }
     }
 
-    if (action.type === 'SET_DATA') {
+    if (action.type === 'ADD_DATA') {
         return {
             ...state,
             data: {
                 ...state.data,
-                tickets: action.tickets,
-                isLoading: !state.data.isLoading,
+                //@ts-ignore
+                tickets: state.data.tickets.concat(action.tickets),
+            }
+        }
+    }
+
+    if (action.type === 'FETCH_END') {
+        return {
+            ...state,
+            data: {
+                ...state.data,
+                isLoading: false,
             }
         }
     }
@@ -102,6 +112,7 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
             ...state,
             data: {
                 ...state.data,
+                isLoading: false,
                 error: !state.data.error
             }
         }

@@ -10,14 +10,7 @@ function App() {
         </header>
         <main className={cl.main}>
             <SideFilters />
-            <section>
-                <nav className={cl.sortFilters}>
-                    <button>Самый дешевый</button>
-                    <button>Самый быстрый</button>
-                    <button>Оптимальный</button>
-                </nav>
-                <TicketList />
-            </section>
+            <TicketList />
         </main>
       </>
     )

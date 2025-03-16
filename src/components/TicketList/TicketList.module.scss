@@ -2,6 +2,37 @@ $primary-color: #2196F3;
 $secondary-color: #F1FCFF;
 $border-color: #DFE5EC;
 
+.sortFilters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 500px;
+  height: 50px;
+  margin-bottom: 10px;
+  outline: 1px solid $border-color;
+  border-radius: 5px;
+
+  button {
+    height: inherit;
+    text-transform: uppercase;
+    background-color: white;
+    letter-spacing: .5px;
+    transition: .25s ease-in all;
+  }
+
+  :last-of-type, :nth-of-type(2){
+    box-shadow: -1px 0px 0px 0px $border-color;
+  }
+
+  :hover {
+    background-color: $secondary-color;
+  }
+
+  :focus {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
 .ticketsContainer {
   width: 500px;
 

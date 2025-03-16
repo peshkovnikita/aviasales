@@ -1,41 +1,55 @@
 import cl from './TicketList.module.scss';
 import Ticket from '../Ticket/Ticket.tsx';
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getTicketsThunk } from '../../services/AviasalesAPI.ts'
+import { getAllTickets } from '../../services/AviasalesAPI.ts'
 import { IState } from '../../reducer.ts';
+import {Progress} from 'antd';
 
 const TicketList = () => {
     const dispatch = useDispatch();
-    const { tickets: ticketsList, isLoading, error } = useSelector((state: IState) => state.data);
+    const { tickets: ticketsList, error } = useSelector((state: IState) => state.data);
     const state = useSelector((state: IState) => state.data);
+
+    const [amount, setAmount] = useState(0)
 
     useEffect(() => {
         // @ts-ignore
-        dispatch(getTicketsThunk())
+        dispatch(getAllTickets())
     }, [dispatch]);
 
-    const loader = <div>Loading...</div>;
-    const errorMessage = <div style={{ color: 'red' }}>ERROR!</div>;
+    useEffect(() => {
+        if(ticketsList) setAmount(ticketsList.length / 100)
+    }, [ticketsList]);
+
+    const errorMessage = <div style={{ color: 'red' }}>Network Error!</div>;
 
     const tickets = ticketsList ?
-        ticketsList.map(data => <Ticket {...data} />)   // ДОБАВИТЬ ЛОАДЕР ANT DESIGN И АТРИБУТ KEY ДЛЯ КОМПОНЕНТА TICKET
-        : null;                                         // СДЕЛАТЬ DISPATCH ДЛЯ ОШИБКИ СЕТИ
+        ticketsList.map((data, index) =>
+            <Ticket key={index} {...data} />)
+        : null;
 
     return(
-        <div className={cl.ticketsContainer}>
-            {isLoading ? loader : null}
-            {error ? errorMessage: null}
-            <ul>
-                { tickets }
-            </ul>
-            {!isLoading ?
-                <button type='button' className={cl.btnLoadMore} onClick={() => console.log(state)}>
-                    Показать еще 5 билетов!
-                </button>
-            : null}
-        </div>
+        <section>
+            <Progress percent={amount} showInfo={false} style={{ marginBottom: '10px' }} strokeColor='#2196F3' />
+            <nav className={cl.sortFilters}>
+                <button>Самый дешевый</button>
+                <button>Самый быстрый</button>
+                <button>Оптимальный</button>
+            </nav>
+            <div className={cl.ticketsContainer}>
+                {error ? errorMessage: null}
+                <ul>
+                    { tickets }
+                </ul>
+                {ticketsList ?
+                    <button type='button' className={cl.btnLoadMore} onClick={() => console.log(state)}>
+                        Показать еще 5 билетов!
+                    </button>
+                    : null}
+            </div>
+        </section>
     )
 }
 
