@@ -24,7 +24,7 @@ export const getTicketsThunk = () => {
             dispatch({ type: 'SET_DATA', tickets: data.tickets});
         } catch (error) {
             console.error('Ошибка при загрузке билетов:', error);
-            //dispatch({ type: 'FETCH_ERROR' });
+            dispatch({ type: 'FETCH_ERROR' });
         }
     };
 };

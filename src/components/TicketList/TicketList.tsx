@@ -8,7 +8,7 @@ import { IState } from '../../reducer.ts';
 
 const TicketList = () => {
     const dispatch = useDispatch();
-    const { tickets: ticketsList, isLoading } = useSelector((state: IState) => state.data);
+    const { tickets: ticketsList, isLoading, error } = useSelector((state: IState) => state.data);
     const state = useSelector((state: IState) => state.data);
 
     useEffect(() => {
@@ -17,6 +17,8 @@ const TicketList = () => {
     }, [dispatch]);
 
     const loader = <div>Loading...</div>;
+    const errorMessage = <div style={{ color: 'red' }}>ERROR!</div>;
+
     const tickets = ticketsList ?
         ticketsList.map(data => <Ticket {...data} />)   // ДОБАВИТЬ ЛОАДЕР ANT DESIGN И АТРИБУТ KEY ДЛЯ КОМПОНЕНТА TICKET
         : null;                                         // СДЕЛАТЬ DISPATCH ДЛЯ ОШИБКИ СЕТИ
@@ -24,6 +26,7 @@ const TicketList = () => {
     return(
         <div className={cl.ticketsContainer}>
             {isLoading ? loader : null}
+            {error ? errorMessage: null}
             <ul>
                 { tickets }
             </ul>

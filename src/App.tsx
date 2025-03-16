@@ -1,6 +1,6 @@
-import cl from './App.module.scss'
+import cl from './App.module.scss';
 import TicketList from './components/TicketList/TicketList.tsx';
-import SideFilters from './components/SideFilters/SideFilters.tsx'
+import SideFilters from './components/SideFilters/SideFilters.tsx';
 
 function App() {
     return (
@@ -11,7 +11,7 @@ function App() {
         <main className={cl.main}>
             <SideFilters />
             <section>
-                <nav className={cl.priceFilter}>
+                <nav className={cl.sortFilters}>
                     <button>Самый дешевый</button>
                     <button>Самый быстрый</button>
                     <button>Оптимальный</button>
@@ -20,7 +20,7 @@ function App() {
             </section>
         </main>
       </>
-  )
+    )
 }
 
-export default App
+export default App;

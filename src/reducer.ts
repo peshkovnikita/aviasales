@@ -40,7 +40,8 @@ interface Ticket {
 
 interface TicketData {
     tickets: [Ticket] | null;
-    isLoading: boolean
+    isLoading: boolean;
+    error: boolean;
 }
 
 export interface IState {
@@ -57,6 +58,7 @@ const initialState:IState = {
     data: {
         tickets: null,
         isLoading: false,
+        error: false,
     },
     filters: {
         TOGGLE_ALL: true,
@@ -88,8 +90,19 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
         return {
             ...state,
             data: {
+                ...state.data,
                 tickets: action.tickets,
                 isLoading: !state.data.isLoading,
+            }
+        }
+    }
+
+    if (action.type === 'FETCH_ERROR') {
+        return {
+            ...state,
+            data: {
+                ...state.data,
+                error: !state.data.error
             }
         }
     }
