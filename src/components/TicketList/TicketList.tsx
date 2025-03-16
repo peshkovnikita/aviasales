@@ -9,7 +9,7 @@ import {Progress} from 'antd';
 
 const TicketList = () => {
     const dispatch = useDispatch();
-    const { tickets: ticketsList, error } = useSelector((state: IState) => state.data);
+    const { tickets: ticketsList, isLoading, error } = useSelector((state: IState) => state.data);
     const state = useSelector((state: IState) => state.data);
 
     const [amount, setAmount] = useState(0)
@@ -43,7 +43,7 @@ const TicketList = () => {
                 <ul>
                     { tickets }
                 </ul>
-                {ticketsList ?
+                {!isLoading ?
                     <button type='button' className={cl.btnLoadMore} onClick={() => console.log(state)}>
                         Показать еще 5 билетов!
                     </button>
