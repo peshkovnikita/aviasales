@@ -15,7 +15,6 @@ async function getTicketsChunk(id) {
     let response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${id}`);
 
     if(response.ok) {
-        console.log(response.status)
         const chunkData = await response.json();
         return await chunkData;
     }
@@ -29,8 +28,10 @@ export const getAllTickets = () => {
 
         try {
             const id = await getId();
+            const initData = await getTicketsChunk(id);
+            dispatch({ type: 'SET_DATA', tickets: initData.tickets});
 
-            for (let chunkCounter = 0; chunkCounter < 20; chunkCounter++) {
+            for (let chunkCounter = 1; chunkCounter < 3; chunkCounter++) {
                 const data = await getTicketsChunk(id);
                 dispatch({ type: 'ADD_DATA', tickets: data.tickets});
             }

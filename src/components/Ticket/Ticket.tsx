@@ -1,6 +1,13 @@
 import cl from './Ticket.module.scss'
 import { addMinutes } from 'date-fns';
 
+const formatPrice = (initPrice: number) => {
+    const price = String(initPrice);
+
+    if(price.length < 6) return `${price.slice(0, 2)} ${price.slice(2, 5)} Р`;
+    else return `${price.slice(0, 3)} ${price.slice(3, 6)} Р`;
+}
+
 const minToHours = (min) => {
     const hours = Math.floor(min / 60);
     const minutes = min % 60;
@@ -24,7 +31,7 @@ function Ticket({ price, carrier, segments }) {
             <div className={cl.infoWrapper}>
                 <div className={cl.ticketHeader}>
                     <span className={cl.price}>
-                        { `${String(price).slice(0, 2)} ${String(price).slice(2, 5)} Р` }
+                        { formatPrice(price) }
                     </span>
                     <img src={`https://pics.avs.io/99/36/${carrier}.png`} alt='airline logo' />
                 </div>

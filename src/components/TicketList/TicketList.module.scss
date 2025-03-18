@@ -11,25 +11,51 @@ $border-color: #DFE5EC;
   outline: 1px solid $border-color;
   border-radius: 5px;
 
-  button {
+  label {
+    align-content: center;
+    border-radius: 5px 0 0 5px;
     height: inherit;
-    text-transform: uppercase;
     background-color: white;
+    text-transform: uppercase;
     letter-spacing: .5px;
-    transition: .25s ease-in all;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s ease-in;
   }
 
-  :last-of-type, :nth-of-type(2){
+  :nth-of-type(2) {
+    border-radius: 0;
     box-shadow: -1px 0px 0px 0px $border-color;
   }
 
-  :hover {
-    background-color: $secondary-color;
+  :last-of-type {
+    border-radius: 0 5px 5px 0;
+    box-shadow: -1px 0px 0px 0px $border-color;
   }
 
-  :focus {
+  input[type="checkbox"]:focus + label {
+    text-decoration: underline;
+  }
+
+  input[type="checkbox"]:checked + label {
     background-color: $primary-color;
+    text-decoration: none;
     color: white;
+  }
+
+  /* visually hidden checkbox */
+  input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
   }
 }
 
