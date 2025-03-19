@@ -3,7 +3,7 @@ type IFiltersState = Record<
     boolean
 >;
 
-type ActiveSort = 'SORT_CHEAPEST' | 'SORT_FASTEST' | 'SORT_OPTIMAL' | null;
+type ActiveSort = 'SORT_CHEAPEST' | 'SORT_FASTEST' | 'SORT_OPTIMAL';
 
 interface Ticket {
     price: number
@@ -43,6 +43,7 @@ export type Action = {
     type: string,
     tickets?: Ticket[],
     sortedTickets?: Ticket[],
+    newVisibleTickets?: Ticket[],
     amount?: number;
 };
 
@@ -53,7 +54,7 @@ const initialState:IState = {
         isLoading: false,
         error: false,
     },
-    activeSort: null,
+    activeSort: 'SORT_CHEAPEST',
     filters: {
         TOGGLE_ALL: true,
         TOGGLE_NO_CHANGES: true,
@@ -83,11 +84,11 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
     if (action.type === 'SET_DATA') {
         return {
             ...state,
-            visibleTickets: action.tickets.slice(0, 5),
+            visibleTickets: action.tickets.slice(0, 5).sort((a, b) => a.price - b.price),
             data: {
                 ...state.data,
                 //@ts-ignore
-                tickets: action.tickets.slice(5, 500),
+                tickets: action.tickets,
             }
         }
     }
@@ -127,18 +128,7 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
     if (action.type === 'LOAD_MORE') {
         return {
             ...state,
-            visibleTickets: state.visibleTickets
-                //@ts-ignore
-                                 .concat(state.data.tickets
-                                     .slice(state.visibleTickets.length, state.visibleTickets.length + action.amount)),
-        }
-    }
-
-    if(action.type === 'VISIBLE_TICKETS') {
-        return {
-            ...state,
-            //@ts-ignore
-            visibleTickets: action.visible
+            visibleTickets: action.newVisibleTickets,
         }
     }
 

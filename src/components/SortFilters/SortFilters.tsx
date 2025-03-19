@@ -1,13 +1,11 @@
 import cl from '../TicketList/TicketList.module.scss';
 import {useDispatch, useSelector} from 'react-redux';
-// import {useEffect} from 'react';
 import { sortCheapest, sortFastest, sortOptimal } from '../../actions.ts';
 
 const SortFilters = () => {
     const dispatch = useDispatch();
     //@ts-ignore
     const activeSort = useSelector((state) => state.activeSort)
-        //const visibleTickets = useSelector((state) => state.visibleTickets)
 
     return(
         <nav className={cl.sortFilters}>

@@ -31,7 +31,7 @@ export const getAllTickets = () => {
             const initData = await getTicketsChunk(id);
             dispatch({ type: 'SET_DATA', tickets: initData.tickets});
 
-            for (let chunkCounter = 1; chunkCounter < 3; chunkCounter++) {
+            for (let chunkCounter = 1; chunkCounter < 20; chunkCounter++) {
                 const data = await getTicketsChunk(id);
                 dispatch({ type: 'ADD_DATA', tickets: data.tickets});
             }
