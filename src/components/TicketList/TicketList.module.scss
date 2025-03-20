@@ -34,7 +34,7 @@ $border-color: #DFE5EC;
   }
 
   input[type="checkbox"]:focus + label {
-    text-decoration: underline;
+    text-decoration: underline!important;
   }
 
   input[type="checkbox"]:checked + label {

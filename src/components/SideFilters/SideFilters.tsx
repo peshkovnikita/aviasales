@@ -24,13 +24,14 @@ const FilterItem = ({ id, label, checked, onChange }) => {
 function SideFilters() {
     const dispatch = useDispatch();
     const filtersState = useSelector((state: IState) => state.filters);
+    const visibleTickets = useSelector((state: IState) => state.visibleTickets);
 
     const filterItems = filters.map(({ id, label, action, stateKey }) => (
         <FilterItem
             key={id}
             id={id}
             label={label}
-            onChange={() => dispatch(action())}
+            onChange={() => dispatch(action(visibleTickets))}
             checked={filtersState[stateKey]}
         />
     ));

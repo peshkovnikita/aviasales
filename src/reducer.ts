@@ -34,6 +34,7 @@ interface TicketData {
 
 export interface IState {
     visibleTickets: Ticket[] | [];
+    unfilteredTickets: Ticket[] | [];
     activeSort: ActiveSort,
     data: TicketData;
     filters: IFiltersState;
@@ -44,11 +45,13 @@ export type Action = {
     tickets?: Ticket[],
     sortedTickets?: Ticket[],
     newVisibleTickets?: Ticket[],
-    amount?: number;
+    amount?: number,
+    ticketsForFiltering?: number,
 };
 
 const initialState:IState = {
     visibleTickets: [],
+    unfilteredTickets: [],
     data: {
         tickets: [],
         isLoading: false,
@@ -161,18 +164,59 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
     }
 
     if (action.type === 'TOGGLE_ALL') {
-        const newValue = !state.filters.TOGGLE_ALL;
-        return {
-            ...state,
-            filters: {
-                TOGGLE_ALL: newValue,
-                TOGGLE_NO_CHANGES: newValue,
-                TOGGLE_ONE_CHANGE: newValue,
-                TOGGLE_TWO_CHANGES: newValue,
-                TOGGLE_THREE_CHANGES: newValue,
-            }
-        };
+        const isAllToggled = !state.filters.TOGGLE_ALL;
+        if(isAllToggled) {
+            return {
+                ...state,
+                visibleTickets: [...state.unfilteredTickets],
+                unfilteredTickets: [],
+                filters: {
+                    TOGGLE_ALL: isAllToggled,
+                    TOGGLE_NO_CHANGES: isAllToggled,
+                    TOGGLE_ONE_CHANGE: isAllToggled,
+                    TOGGLE_TWO_CHANGES: isAllToggled,
+                    TOGGLE_THREE_CHANGES: isAllToggled,
+                }
+            };
+        }
+        else {
+            return {
+                ...state,
+                visibleTickets: [],
+                unfilteredTickets: [...state.visibleTickets],
+                filters: {
+                    TOGGLE_ALL: isAllToggled,
+                    TOGGLE_NO_CHANGES: isAllToggled,
+                    TOGGLE_ONE_CHANGE: isAllToggled,
+                    TOGGLE_TWO_CHANGES: isAllToggled,
+                    TOGGLE_THREE_CHANGES: isAllToggled,
+                }
+            };
+        }
     }
+// Сделать counter в state для кол-ва загруженных tickets (изначально их 5),
+// чтобы с помощью slice обращаться ко всему массиву tickets.
+// Убрать поле unfilteredTickets из state
+
+    // if(action.type === 'TOGGLE_NO_CHANGES') {
+    //     const isNoChangesToggled = !state.filters.TOGGLE_NO_CHANGES;
+    //     if(isNoChangesToggled && !state.filters.TOGGLE_ALL && !state.filters.TOGGLE_ONE_CHANGE && !state.filters.TOGGLE_TWO_CHANGES && !state.filters.TOGGLE_THREE_CHANGES) {
+    //         return {
+    //             ...state,
+    //             visibleTickets: [...state.unfilteredTickets].filter(ticket =>
+    //                     ticket.segments.some(segment => segment.stops.length === 0)),
+    //             unfilteredTickets: [...state.visibleTickets],
+    //             filters: {
+    //                 ...state.filters,
+    //                 TOGGLE_ALL: false,
+    //                 TOGGLE_NO_CHANGES: isNoChangesToggled,
+    //                 TOGGLE_ONE_CHANGE: false,
+    //                 TOGGLE_TWO_CHANGES: false,
+    //                 TOGGLE_THREE_CHANGES: false,
+    //             }
+    //         };
+    //     }
+    // }
 
     if (action.type !== 'TOGGLE_ALL' && action.type.startsWith('TOGGLE')) {
         const key = action.type;
@@ -181,13 +225,17 @@ const reducer = (state: IState = initialState, action:Action ): IState => {
             [key]: !state.filters[key]
         };
 
-        return {
-            ...state,
-            filters: {
-                ...updatedFilters,
-                TOGGLE_ALL: willToggleAll(updatedFilters)
-            }
-        };
+        if(willToggleAll(updatedFilters)) {
+            return {
+                ...state,
+                visibleTickets: [...state.unfilteredTickets],
+                unfilteredTickets: [],
+                filters: {
+                    ...updatedFilters,
+                    TOGGLE_ALL: true
+                }
+            };
+        }
     }
 
     return state;

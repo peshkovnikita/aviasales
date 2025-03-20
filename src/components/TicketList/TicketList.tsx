@@ -31,21 +31,21 @@ const TicketList = () => {
     }, [ticketsList]);
 
     // устанавливает видимые билеты
-    useEffect(() => {
-        // @ts-ignore
-        setList(visibleTickets)
-    }, [visibleTickets])
+    useEffect(() => setList(visibleTickets), [visibleTickets])
 
     const errorMessage = <p style={{ color: 'red' }}>Network Error!</p>;
-    const progressStatus = isLoading ? 'active' : 'normal'
+    const progressStatus = isLoading ? 'active' : 'normal';
+    const thumbNail = <p style={{ fontSize: '14px', paddingTop: '10px' }}>
+                          Рейсов, подходящих под заданные фильтры, не найдено
+                      </p>
 
-    const tickets = visibleTickets ?
+    const tickets = visibleTickets.length ?
         shownList.map(data =>
             <Ticket
                 key={`${data.segments[0].date}-${data.segments[1].date}`}
                 {...data}
             />)
-        : null;
+        : thumbNail;
 
     return(
         <section>
@@ -56,10 +56,11 @@ const TicketList = () => {
                 <ul>
                     { tickets }
                 </ul>
-                {
-                    <button type='button' className={cl.btnLoadMore} onClick={() => dispatch(loadMore(ticketsList, shownList, activeSort)) }>
+                { visibleTickets.length ?
+                    <button type='button' className={cl.btnLoadMore} onClick={ () => dispatch(loadMore(ticketsList, shownList, activeSort)) }>
                         Показать еще 5 билетов!
                     </button>
+                    : null
                 }
             </div>
         </section>
