@@ -33,25 +33,21 @@ interface TicketData {
 }
 
 export interface IState {
-    visibleTickets: Ticket[] | [];
-    unfilteredTickets: Ticket[] | [];
+    visibleTickets: Ticket[] | [],
+    loadedCount: number,
     activeSort: ActiveSort,
-    data: TicketData;
-    filters: IFiltersState;
+    data: TicketData,
+    filters: IFiltersState,
 }
 
 export type Action = {
     type: string,
     tickets?: Ticket[],
-    sortedTickets?: Ticket[],
-    newVisibleTickets?: Ticket[],
-    amount?: number,
-    ticketsForFiltering?: number,
 };
 
 const initialState:IState = {
     visibleTickets: [],
-    unfilteredTickets: [],
+    loadedCount: 5,
     data: {
         tickets: [],
         isLoading: false,
@@ -73,172 +69,118 @@ const willToggleAll = (filterState):boolean =>
     filterState.TOGGLE_TWO_CHANGES &&
     filterState.TOGGLE_THREE_CHANGES;
 
-const reducer = (state: IState = initialState, action:Action ): IState => {
-    if (action.type === 'FETCH_START') {
-        return {
-            ...state,
-            data: {
-                ...state.data,
-                isLoading: true,
-            }
-        }
-    }
+const applyFilters = (tickets: Ticket[], filters: IFiltersState): Ticket[] => {
+    if (filters.TOGGLE_ALL) return tickets;
 
-    if (action.type === 'SET_DATA') {
-        return {
-            ...state,
-            visibleTickets: action.tickets.slice(0, 5).sort((a, b) => a.price - b.price),
-            data: {
-                ...state.data,
-                //@ts-ignore
-                tickets: action.tickets,
-            }
-        }
-    }
+    return tickets.filter(ticket => {
+        return (
+            (filters.TOGGLE_NO_CHANGES && ticket.segments.some(s => s.stops.length === 0)) ||
+            (filters.TOGGLE_ONE_CHANGE && ticket.segments.some(s => s.stops.length === 1)) ||
+            (filters.TOGGLE_TWO_CHANGES && ticket.segments.some(s => s.stops.length === 2)) ||
+            (filters.TOGGLE_THREE_CHANGES && ticket.segments.some(s => s.stops.length === 3))
+        );
+    });
+};
 
-    if (action.type === 'ADD_DATA') {
-        return {
-            ...state,
-            data: {
-                ...state.data,
-                //@ts-ignore
-                tickets: state.data.tickets.concat(action.tickets),
-            }
-        }
+const sortTickets = (tickets: Ticket[], sortType: ActiveSort): Ticket[] => {
+    switch (sortType) {
+        case 'SORT_CHEAPEST':
+            return [...tickets].sort((a, b) => a.price - b.price);
+        case 'SORT_FASTEST':
+            return [...tickets].sort((a, b) =>
+                (a.segments[0].duration + a.segments[1].duration) -
+                (b.segments[0].duration + b.segments[1].duration)
+            );
+        case 'SORT_OPTIMAL':
+            return [...tickets].sort((a, b) =>
+                (b.price / (b.segments[0].duration + b.segments[1].duration)) -
+                (a.price / (a.segments[0].duration + a.segments[1].duration))
+            );
+        default:
+            return tickets;
     }
+};
 
-    if (action.type === 'FETCH_END') {
-        return {
-            ...state,
-            data: {
-                ...state.data,
-                isLoading: false,
-            }
-        }
-    }
+const reducer = (state: IState = initialState, action: Action): IState => {
+    switch (action.type) {
+        case 'FETCH_START':
+            return { ...state, data: { ...state.data, isLoading: true } };
 
-    if (action.type === 'FETCH_ERROR') {
-        return {
-            ...state,
-            data: {
-                ...state.data,
-                isLoading: false,
-                error: !state.data.error
-            }
-        }
-    }
-
-    if (action.type === 'LOAD_MORE') {
-        return {
-            ...state,
-            visibleTickets: action.newVisibleTickets,
-        }
-    }
-
-    if(action.type === 'SORT_CHEAPEST') {
-        return {
-            ...state,
-            visibleTickets: [...state.visibleTickets].sort((a, b) => a.price - b.price),
-            activeSort: action.type,
-        }
-    }
-
-    if(action.type === 'SORT_FASTEST') {
-        return {
-            ...state,
-            visibleTickets: [...state.visibleTickets].sort((a, b) =>
-                                (a.segments[0].duration + a.segments[1].duration) -
-                                (b.segments[0].duration + b.segments[1].duration)),
-            activeSort: action.type,
-        }
-    }
-
-    if(action.type === 'SORT_OPTIMAL') {
-        return {
-            ...state,
-            visibleTickets: [...state.visibleTickets].sort((a, b) =>
-                                (b.price / (b.segments[0].duration + b.segments[1].duration)) -
-                                (a.price / (a.segments[0].duration + a.segments[1].duration))),
-            activeSort: action.type,
-        }
-    }
-
-    if (action.type === 'TOGGLE_ALL') {
-        const isAllToggled = !state.filters.TOGGLE_ALL;
-        if(isAllToggled) {
+        case 'SET_DATA':
             return {
                 ...state,
-                visibleTickets: [...state.unfilteredTickets],
-                unfilteredTickets: [],
-                filters: {
-                    TOGGLE_ALL: isAllToggled,
-                    TOGGLE_NO_CHANGES: isAllToggled,
-                    TOGGLE_ONE_CHANGE: isAllToggled,
-                    TOGGLE_TWO_CHANGES: isAllToggled,
-                    TOGGLE_THREE_CHANGES: isAllToggled,
-                }
+                data: { ...state.data, tickets: action.tickets || [] },
+                loadedCount: 5,
+                visibleTickets: sortTickets(applyFilters(action.tickets.slice(0, 5), state.filters), state.activeSort),
             };
-        }
-        else {
+
+        case 'ADD_DATA':
             return {
                 ...state,
-                visibleTickets: [],
-                unfilteredTickets: [...state.visibleTickets],
-                filters: {
-                    TOGGLE_ALL: isAllToggled,
-                    TOGGLE_NO_CHANGES: isAllToggled,
-                    TOGGLE_ONE_CHANGE: isAllToggled,
-                    TOGGLE_TWO_CHANGES: isAllToggled,
-                    TOGGLE_THREE_CHANGES: isAllToggled,
-                }
+                data: { ...state.data, tickets: [...state.data.tickets, ...(action.tickets || [])] }
             };
-        }
-    }
-// Сделать counter в state для кол-ва загруженных tickets (изначально их 5),
-// чтобы с помощью slice обращаться ко всему массиву tickets.
-// Убрать поле unfilteredTickets из state
 
-    // if(action.type === 'TOGGLE_NO_CHANGES') {
-    //     const isNoChangesToggled = !state.filters.TOGGLE_NO_CHANGES;
-    //     if(isNoChangesToggled && !state.filters.TOGGLE_ALL && !state.filters.TOGGLE_ONE_CHANGE && !state.filters.TOGGLE_TWO_CHANGES && !state.filters.TOGGLE_THREE_CHANGES) {
-    //         return {
-    //             ...state,
-    //             visibleTickets: [...state.unfilteredTickets].filter(ticket =>
-    //                     ticket.segments.some(segment => segment.stops.length === 0)),
-    //             unfilteredTickets: [...state.visibleTickets],
-    //             filters: {
-    //                 ...state.filters,
-    //                 TOGGLE_ALL: false,
-    //                 TOGGLE_NO_CHANGES: isNoChangesToggled,
-    //                 TOGGLE_ONE_CHANGE: false,
-    //                 TOGGLE_TWO_CHANGES: false,
-    //                 TOGGLE_THREE_CHANGES: false,
-    //             }
-    //         };
-    //     }
-    // }
+        case 'FETCH_END':
+            return { ...state, data: { ...state.data, isLoading: false } };
 
-    if (action.type !== 'TOGGLE_ALL' && action.type.startsWith('TOGGLE')) {
-        const key = action.type;
-        const updatedFilters = {
-            ...state.filters,
-            [key]: !state.filters[key]
-        };
+        case 'FETCH_ERROR':
+            return { ...state, data: { ...state.data, isLoading: false, error: true } };
 
-        if(willToggleAll(updatedFilters)) {
+        case 'LOAD_MORE':
+            const newLoadedCount = state.loadedCount + 5;
             return {
                 ...state,
-                visibleTickets: [...state.unfilteredTickets],
-                unfilteredTickets: [],
-                filters: {
-                    ...updatedFilters,
-                    TOGGLE_ALL: true
-                }
+                loadedCount: newLoadedCount,
+                visibleTickets: sortTickets(
+                    applyFilters(state.data.tickets.slice(0, newLoadedCount), state.filters),
+                    state.activeSort
+                ),
             };
-        }
-    }
 
-    return state;
-}
+        case 'SORT_CHEAPEST':
+        case 'SORT_FASTEST':
+        case 'SORT_OPTIMAL':
+            return {
+                ...state,
+                activeSort: action.type,
+                visibleTickets: sortTickets(state.visibleTickets, action.type as ActiveSort),
+            };
+
+        case 'TOGGLE_ALL':
+            const newFilterState = {
+                TOGGLE_ALL: !state.filters.TOGGLE_ALL,
+                TOGGLE_NO_CHANGES: !state.filters.TOGGLE_ALL,
+                TOGGLE_ONE_CHANGE: !state.filters.TOGGLE_ALL,
+                TOGGLE_TWO_CHANGES: !state.filters.TOGGLE_ALL,
+                TOGGLE_THREE_CHANGES: !state.filters.TOGGLE_ALL,
+            };
+            return {
+                ...state,
+                filters: newFilterState,
+                visibleTickets: sortTickets(
+                    applyFilters(state.data.tickets.slice(0, state.loadedCount), newFilterState),
+                    state.activeSort
+                ),
+            };
+
+        default:
+            if (action.type.startsWith('TOGGLE')) {
+                const updatedFilters = {
+                    ...state.filters,
+                    [action.type]: !state.filters[action.type],
+                    TOGGLE_ALL: willToggleAll({ ...state.filters, [action.type]: !state.filters[action.type] }),
+                };
+                return {
+                    ...state,
+                    filters: updatedFilters,
+                    visibleTickets: sortTickets(
+                        applyFilters(state.data.tickets.slice(0, state.loadedCount), updatedFilters),
+                        state.activeSort
+                    ),
+                };
+            }
+            return state;
+    }
+};
 
 export default reducer;

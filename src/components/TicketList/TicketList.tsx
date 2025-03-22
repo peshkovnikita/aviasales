@@ -12,8 +12,6 @@ import { Progress } from 'antd';
 const TicketList = () => {
     const dispatch = useDispatch();
     const { tickets: ticketsList, isLoading, error } = useSelector((state: IState) => state.data);
-    //@ts-ignore
-    const activeSort = useSelector((state) => state.activeSort);
     const visibleTickets = useSelector((state: IState) => state.visibleTickets);
 
     const [amount, setAmount] = useState(0)
@@ -33,11 +31,17 @@ const TicketList = () => {
     // устанавливает видимые билеты
     useEffect(() => setList(visibleTickets), [visibleTickets])
 
-    const errorMessage = <p style={{ color: 'red' }}>Network Error!</p>;
-    const progressStatus = isLoading ? 'active' : 'normal';
-    const thumbNail = <p style={{ fontSize: '14px', paddingTop: '10px' }}>
-                          Рейсов, подходящих под заданные фильтры, не найдено
-                      </p>
+    const errorMessage = error ? <p style={{ color: 'red' }}>Ошибка сети</p> : null;
+    const thumbNail = !visibleTickets.length ?
+        <p style={{ fontSize: '14px', paddingTop: '10px' }}>
+            Рейсов, подходящих под заданные фильтры, не найдено
+        </p> : null;
+
+    const loadMoreBtn = visibleTickets.length ?
+        <button type='button' className={cl.btnLoadMore} onClick={ () => dispatch(loadMore()) }>
+            Показать еще билеты!
+        </button>
+        : null;
 
     const tickets = visibleTickets.length ?
         shownList.map(data =>
@@ -45,23 +49,24 @@ const TicketList = () => {
                 key={`${data.segments[0].date}-${data.segments[1].date}`}
                 {...data}
             />)
-        : thumbNail;
+        : null;
 
     return(
         <section>
-            <Progress percent={amount} showInfo={false} status={progressStatus} style={{ marginBottom: '10px' }} strokeColor='#2196F3' />
+            <Progress
+                percent={amount}
+                showInfo={false}
+                status={isLoading ? 'active' : 'normal'}
+                style={{ marginBottom: '10px' }}
+                strokeColor='#2196F3' />
             <SortFilters />
             <div className={cl.ticketsContainer}>
-                {error ? errorMessage: null}
+                { errorMessage  }
+                { thumbNail }
                 <ul>
                     { tickets }
                 </ul>
-                { visibleTickets.length ?
-                    <button type='button' className={cl.btnLoadMore} onClick={ () => dispatch(loadMore(ticketsList, shownList, activeSort)) }>
-                        Показать еще 5 билетов!
-                    </button>
-                    : null
-                }
+                { loadMoreBtn }
             </div>
         </section>
     )

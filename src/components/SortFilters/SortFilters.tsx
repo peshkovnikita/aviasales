@@ -1,5 +1,5 @@
 import cl from '../TicketList/TicketList.module.scss';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { sortCheapest, sortFastest, sortOptimal } from '../../actions.ts';
 
 const SortFilters = () => {
